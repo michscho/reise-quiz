@@ -1,0 +1,2224 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thailand Quiz - Die ultimative Herausforderung</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --secondary: #fbbf24;
+            --accent: #ef4444;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --success: #00c853;
+            --error: #ff1744;
+            --timer: #6366f1;
+            --timer-warning: #f59e0b;
+            --timer-danger: #ef4444;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background: var(--dark);
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .floating-element {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.1;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-30px) rotate(5deg); }
+            50% { transform: translateY(-15px) rotate(-5deg); }
+            75% { transform: translateY(-40px) rotate(3deg); }
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: particle-float 15s infinite ease-in-out;
+            opacity: 0.3;
+        }
+
+        @keyframes particle-float {
+            0%, 100% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) scale(1); opacity: 0; }
+        }
+
+        .main-container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+            padding: 35px 25px;
+            max-width: 650px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            animation: container-appear 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes container-appear {
+            0% { opacity: 0; transform: scale(0.8) translateY(50px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .quiz-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            animation: gradient-shift 3s ease infinite;
+            background-size: 200% 200%;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .start-screen {
+            text-align: center;
+            animation: fade-in 0.6s ease;
+        }
+
+        .start-screen.hide {
+            display: none;
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo-container {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .flag-emoji {
+            font-size: 4.5rem;
+            display: inline-block;
+            animation: flag-wave 2s ease-in-out infinite;
+            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.2));
+        }
+
+        @keyframes flag-wave {
+            0%, 100% { transform: rotate(-3deg) scale(1); }
+            50% { transform: rotate(3deg) scale(1.05); }
+        }
+
+        .glow-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(251, 191, 36, 0.3) 0%, transparent 70%);
+            animation: glow-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.8; }
+        }
+
+        .start-screen h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .start-screen .subtitle {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            padding: 0 10px;
+        }
+
+        .fun-facts-section {
+            margin-bottom: 25px;
+        }
+
+        .fun-facts-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .fun-fact-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 18px;
+            margin-bottom: 12px;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            border-left: 4px solid var(--secondary);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .fun-fact-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .fun-fact-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .fun-fact-text {
+            font-size: 0.95rem;
+            color: #444;
+            line-height: 1.5;
+        }
+
+        .fun-fact-text strong {
+            color: var(--primary);
+        }
+
+        .start-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .start-btn, .info-btn, .vocab-btn, .food-btn {
+            width: 100%;
+            border: none;
+            padding: 16px 20px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            box-shadow: 0 10px 40px rgba(30, 58, 138, 0.4);
+            font-size: 1.15rem;
+            padding: 18px 50px;
+        }
+
+        .info-btn {
+            background: linear-gradient(135deg, var(--secondary) 0%, #ff9800 100%);
+            color: #333;
+            box-shadow: 0 6px 25px rgba(251, 191, 36, 0.35);
+        }
+
+        .vocab-btn {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.35);
+        }
+
+        .food-btn {
+            background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);
+            color: white;
+            box-shadow: 0 6px 25px rgba(236, 72, 153, 0.35);
+        }
+
+        .start-btn::before, .info-btn::before, .vocab-btn::before, .food-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .start-btn:hover::before, .info-btn:hover::before, .vocab-btn:hover::before, .food-btn:hover::before {
+            left: 100%;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 50px rgba(30, 58, 138, 0.5);
+        }
+
+        .info-btn:hover, .vocab-btn:hover, .food-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        /* Timer Styles */
+        .timer-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .timer-container {
+            position: relative;
+            width: 90px;
+            height: 90px;
+        }
+
+        .timer-ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .timer-ring svg {
+            transform: rotate(-90deg);
+            width: 100%;
+            height: 100%;
+        }
+
+        .timer-ring-bg {
+            fill: none;
+            stroke: #e5e7eb;
+            stroke-width: 6;
+        }
+
+        .timer-ring-progress {
+            fill: none;
+            stroke: url(#timerGradient);
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-dasharray: 251.2;
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear, stroke 0.3s ease;
+        }
+
+        .timer-ring-progress.warning {
+            stroke: var(--timer-warning);
+        }
+
+        .timer-ring-progress.danger {
+            stroke: var(--timer-danger);
+            animation: pulse-ring 0.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-ring {
+            0%, 100% { stroke-width: 6; }
+            50% { stroke-width: 8; }
+        }
+
+        .timer-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .timer-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--timer);
+            line-height: 1;
+            transition: color 0.3s ease;
+        }
+
+        .timer-number.warning {
+            color: var(--timer-warning);
+        }
+
+        .timer-number.danger {
+            color: var(--timer-danger);
+        }
+
+        .timer-label {
+            font-size: 0.6rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .timer-glow {
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .timer-container.active .timer-glow {
+            opacity: 1;
+            animation: glow-breathe 2s ease-in-out infinite;
+        }
+
+        @keyframes glow-breathe {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .timer-container.danger .timer-glow {
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.3) 0%, transparent 70%);
+            animation: glow-danger 0.5s ease-in-out infinite;
+        }
+
+        @keyframes glow-danger {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.15); opacity: 1; }
+        }
+
+        .quiz-content {
+            display: none;
+        }
+
+        .quiz-content.show {
+            display: block;
+            animation: slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes slide-in {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .progress-section {
+            margin-bottom: 20px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .question-counter {
+            font-size: 0.9rem;
+            color: #888;
+            font-weight: 500;
+        }
+
+        .question-counter span {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .score-badge {
+            background: linear-gradient(135deg, var(--secondary) 0%, #ff9800 100%);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 10px;
+            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+
+        .progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            color: #1565c0;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            animation: badge-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes badge-pop {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .question-container {
+            margin-bottom: 25px;
+        }
+
+        .question {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #2d3436;
+            line-height: 1.5;
+            text-align: center;
+            animation: question-appear 0.5s ease;
+        }
+
+        @keyframes question-appear {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .option {
+            padding: 14px 18px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option-letter {
+            width: 30px;
+            height: 30px;
+            min-width: 30px;
+            background: #e9ecef;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .option-text {
+            flex: 1;
+        }
+
+        .option:hover {
+            transform: translateX(5px);
+            border-color: var(--primary);
+            box-shadow: 0 5px 20px rgba(30, 58, 138, 0.15);
+        }
+
+        .option:hover .option-letter {
+            background: var(--primary);
+            color: white;
+        }
+
+        .option.correct {
+            border-color: var(--success);
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            animation: correct-pulse 0.6s ease;
+        }
+
+        .option.correct .option-letter {
+            background: var(--success);
+            color: white;
+        }
+
+        @keyframes correct-pulse {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.02); }
+            50% { transform: scale(0.98); }
+            100% { transform: scale(1); }
+        }
+
+        .option.wrong {
+            border-color: var(--error);
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            animation: wrong-shake 0.6s ease;
+        }
+
+        .option.wrong .option-letter {
+            background: var(--error);
+            color: white;
+        }
+
+        @keyframes wrong-shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        .option.disabled {
+            pointer-events: none;
+        }
+
+        .option.disabled:not(.correct):not(.wrong) {
+            opacity: 0.5;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            display: none;
+            animation: feedback-appear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes feedback-appear {
+            0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border: 2px solid #a5d6a7;
+        }
+
+        .feedback.wrong {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border: 2px solid #ef9a9a;
+        }
+
+        .feedback-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .feedback-icon {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .feedback.correct .feedback-icon {
+            background: var(--success);
+        }
+
+        .feedback.wrong .feedback-icon {
+            background: var(--error);
+        }
+
+        .feedback-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .feedback.correct .feedback-title {
+            color: #2e7d32;
+        }
+
+        .feedback.wrong .feedback-title {
+            color: #c62828;
+        }
+
+        .correct-answer {
+            background: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #c62828;
+        }
+
+        .fact-box {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            position: relative;
+        }
+
+        .fact-box::before {
+            content: '💡';
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            font-size: 1.2rem;
+            background: white;
+            padding: 3px;
+            border-radius: 50%;
+        }
+
+        .fact-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .fact-text {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .next-btn {
+            display: none;
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 8px 25px rgba(30, 58, 138, 0.3);
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(30, 58, 138, 0.4);
+        }
+
+        .next-btn.show {
+            display: block;
+            animation: btn-appear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes btn-appear {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .results {
+            text-align: center;
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+            animation: results-appear 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes results-appear {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .results-header h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+
+        .confetti {
+            font-size: 2.5rem;
+            animation: confetti-bounce 1s ease infinite;
+        }
+
+        @keyframes confetti-bounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(10deg); }
+        }
+
+        .score-display {
+            position: relative;
+            margin: 30px auto;
+            width: 160px;
+            height: 160px;
+        }
+
+        .score-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--success) calc(var(--score-percent) * 1%),
+                #e9ecef calc(var(--score-percent) * 1%)
+            );
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: score-rotate 1s ease-out;
+        }
+
+        @keyframes score-rotate {
+            0% { transform: rotate(-90deg); opacity: 0; }
+            100% { transform: rotate(0deg); opacity: 1; }
+        }
+
+        .score-inner {
+            width: 130px;
+            height: 130px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .score-total {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .score-percent {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--success);
+            margin-top: 3px;
+        }
+
+        .result-message {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            line-height: 1.5;
+        }
+
+        .result-stats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 15px 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .stat-number.correct-stat {
+            color: var(--success);
+        }
+
+        .stat-number.wrong-stat {
+            color: var(--error);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .result-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .discover-btn {
+            padding: 14px 30px;
+            background: linear-gradient(135deg, var(--secondary) 0%, #ff9800 100%);
+            color: #333;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 8px 25px rgba(251, 191, 36, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .discover-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(251, 191, 36, 0.5);
+        }
+
+        .restart-btn {
+            padding: 12px 25px;
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            animation: modal-appear 0.4s ease;
+        }
+
+        .modal.show {
+            display: block;
+        }
+
+        @keyframes modal-appear {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-backdrop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 700px;
+            width: calc(100% - 30px);
+            max-height: 90vh;
+            margin: 5vh auto;
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            animation: modal-slide 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes modal-slide {
+            from { opacity: 0; transform: translateY(50px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .modal-header {
+            padding: 25px 20px;
+            text-align: center;
+            position: relative;
+            color: white;
+        }
+
+        .modal-header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: white;
+            border-radius: 50% 50% 0 0;
+        }
+
+        .modal-header.info-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        }
+
+        .modal-header.vocab-header {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+        }
+
+        .modal-header.food-header {
+            background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%);
+        }
+
+        .modal-flag {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            animation: flag-wave 2s ease-in-out infinite;
+        }
+
+        .modal-header h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .modal-header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .modal-body {
+            padding: 30px 20px 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .modal-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .modal-body::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .info-section {
+            margin-bottom: 25px;
+        }
+
+        .info-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .key-facts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .key-fact {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .key-fact:hover {
+            transform: translateY(-3px);
+        }
+
+        .key-fact-icon {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .key-fact-label {
+            font-size: 0.7rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 3px;
+        }
+
+        .key-fact-value {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .history-timeline {
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .history-timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 5px;
+            bottom: 5px;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+            padding-left: 15px;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+        }
+
+        .timeline-year {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 3px;
+        }
+
+        .timeline-event {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .highlights-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .highlight-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+            border-radius: 12px;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .highlight-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .highlight-content h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .highlight-content p {
+            font-size: 0.85rem;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        /* Vocabulary Styles */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .vocab-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 15px;
+            border-left: 4px solid #6366f1;
+            transition: all 0.3s ease;
+        }
+
+        .vocab-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .vocab-thai {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 6px;
+        }
+
+        .vocab-pronunciation {
+            font-size: 0.95rem;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .pronunciation-phonetic {
+            background: #e0e7ff;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #4f46e5;
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        .vocab-german {
+            font-size: 1rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* Food Styles */
+        .food-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .food-card {
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+            border-radius: 16px;
+            padding: 18px;
+            border-left: 4px solid #ec4899;
+            transition: all 0.3s ease;
+        }
+
+        .food-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.2);
+        }
+
+        .food-header-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .food-emoji {
+            font-size: 2rem;
+        }
+
+        .food-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .food-type {
+            font-size: 0.75rem;
+            color: #ec4899;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .food-description {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .food-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .food-tag {
+            background: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .food-tag.spicy { background: #fee2e2; color: #dc2626; }
+        .food-tag.vegetarian { background: #d1fae5; color: #059669; }
+        .food-tag.sweet { background: #fef3c7; color: #d97706; }
+        .food-tag.drink { background: #dbeafe; color: #2563eb; }
+        .food-tag.seafood { background: #e0f2fe; color: #0284c7; }
+
+        .food-section-divider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 25px 0 20px;
+        }
+
+        .food-section-divider::before,
+        .food-section-divider::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ec4899, transparent);
+        }
+
+        .food-section-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #ec4899;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            .quiz-container { padding: 25px 18px; }
+            .flag-emoji { font-size: 3.5rem; }
+            .start-screen h1 { font-size: 1.7rem; }
+            .btn-row { grid-template-columns: 1fr; }
+            .timer-container { width: 80px; height: 80px; }
+            .timer-number { font-size: 1.5rem; }
+            .question { font-size: 1.05rem; }
+            .option { padding: 12px 14px; font-size: 0.9rem; }
+            .modal-content { width: calc(100% - 20px); margin: 3vh auto; }
+            .modal-body { max-height: 65vh; }
+            .key-facts-grid { gap: 8px; }
+            .key-fact { padding: 12px 8px; }
+            .key-fact-value { font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+<a href="index.html" style="position:fixed;top:16px;left:16px;z-index:9999;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:rgba(0,0,0,0.45);color:#fff;text-decoration:none;font-family:Poppins,sans-serif;font-size:14px;font-weight:600;border-radius:999px;backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.15);">← Übersicht</a>
+{BL}
+    <div class="background">
+        <div class="floating-elements" id="floatingElements"></div>
+        <div class="particles" id="particles"></div>
+    </div>
+
+    <div class="main-container">
+        <div class="quiz-container">
+            <!-- Start Screen -->
+            <div class="start-screen" id="startScreen">
+                <div class="logo-container">
+                    <div class="glow-ring"></div>
+                    <div class="flag-emoji">🇹🇭</div>
+                </div>
+                <h1>Thailand Quiz</h1>
+                <p class="subtitle">Entdecke das faszinierende Land des Lächelns!</p>
+                
+                <div class="fun-facts-section">
+                    <div class="fun-facts-title">✨ Wusstest du schon?</div>
+                    <div class="fun-fact-card" id="funFact1">
+                        <div class="fun-fact-icon">🐘</div>
+                        <div class="fun-fact-text"></div>
+                    </div>
+                    <div class="fun-fact-card" id="funFact2">
+                        <div class="fun-fact-icon">🏛️</div>
+                        <div class="fun-fact-text"></div>
+                    </div>
+                </div>
+
+                <div class="start-buttons">
+                    <button class="start-btn" onclick="startQuiz()">🚀 Quiz starten</button>
+                    <div class="btn-row">
+                        <button class="info-btn" onclick="openModal('infoModal')">🏝️ Entdecken</button>
+                        <button class="vocab-btn" onclick="openModal('vocabModal')">📚 Vokabeln</button>
+                    </div>
+                    <button class="food-btn" onclick="openModal('foodModal')">🍜 Kulinarik entdecken</button>
+                </div>
+            </div>
+
+            <!-- Quiz Content -->
+            <div class="quiz-content" id="quizContent">
+                <div class="timer-wrapper">
+                    <div class="timer-container active" id="timerContainer">
+                        <div class="timer-glow"></div>
+                        <div class="timer-ring">
+                            <svg viewBox="0 0 100 100">
+                                <defs>
+                                    <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#6366f1"/>
+                                        <stop offset="100%" style="stop-color:#8b5cf6"/>
+                                    </linearGradient>
+                                </defs>
+                                <circle class="timer-ring-bg" cx="50" cy="50" r="40"/>
+                                <circle class="timer-ring-progress" id="timerProgress" cx="50" cy="50" r="40"/>
+                            </svg>
+                        </div>
+                        <div class="timer-inner">
+                            <div class="timer-number" id="timerNumber">35</div>
+                            <div class="timer-label">Sek</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <div class="question-counter">Frage <span id="currentNum">1</span> / <span id="totalNum">26</span></div>
+                        <div class="score-badge">⭐ <span id="currentScore">0</span></div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" id="progress"></div>
+                    </div>
+                </div>
+
+                <div class="category-badge" id="category">📍 <span id="categoryText">Kategorie</span></div>
+                
+                <div class="question-container">
+                    <div class="question" id="question"></div>
+                </div>
+
+                <div class="options" id="options"></div>
+
+                <div class="feedback" id="feedback">
+                    <div class="feedback-header">
+                        <div class="feedback-icon" id="feedbackIcon"></div>
+                        <div class="feedback-title" id="feedbackTitle"></div>
+                    </div>
+                    <div class="correct-answer" id="correctAnswer" style="display: none;"></div>
+                    <div class="fact-box">
+                        <div class="fact-label">Wusstest du schon?</div>
+                        <div class="fact-text" id="factText"></div>
+                    </div>
+                </div>
+
+                <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Weiter →</button>
+            </div>
+
+            <!-- Results Screen -->
+            <div class="results" id="results">
+                <div class="results-header">
+                    <div class="confetti">🎊</div>
+                    <h2>Quiz abgeschlossen!</h2>
+                </div>
+
+                <div class="score-display">
+                    <div class="score-circle" id="scoreCircle">
+                        <div class="score-inner">
+                            <div class="score-number" id="finalScoreNum">0</div>
+                            <div class="score-total">von <span id="finalTotal">26</span></div>
+                            <div class="score-percent" id="scorePercent">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="result-message" id="resultMessage"></p>
+
+                <div class="result-stats">
+                    <div class="stat">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-number correct-stat" id="correctCount">0</div>
+                        <div class="stat-label">Richtig</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-icon">❌</div>
+                        <div class="stat-number wrong-stat" id="wrongCount">0</div>
+                        <div class="stat-label">Falsch</div>
+                    </div>
+                </div>
+
+                <div class="result-buttons">
+                    <button class="discover-btn" onclick="openModal('infoModal')">🏝️ Thailand entdecken</button>
+                    <button class="restart-btn" onclick="restartQuiz()">🔄 Nochmal spielen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Modal -->
+    <div class="modal" id="infoModal">
+        <div class="modal-backdrop" onclick="closeModal('infoModal')"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('infoModal')">✕</button>
+            <div class="modal-header info-header">
+                <div class="modal-flag">🇹🇭</div>
+                <h2>Thailand</h2>
+                <p>Das Land des Lächelns</p>
+            </div>
+            <div class="modal-body">
+                <div class="info-section">
+                    <div class="info-section-title">📊 Auf einen Blick</div>
+                    <div class="key-facts-grid">
+                        <div class="key-fact"><div class="key-fact-icon">🏛️</div><div class="key-fact-label">Hauptstadt</div><div class="key-fact-value">Bangkok (Krung Thep)</div></div>
+                        <div class="key-fact"><div class="key-fact-icon">👥</div><div class="key-fact-label">Bevölkerung</div><div class="key-fact-value">~70 Millionen</div></div>
+                        <div class="key-fact"><div class="key-fact-icon">📐</div><div class="key-fact-label">Fläche</div><div class="key-fact-value">513.120 km²</div></div>
+                        <div class="key-fact"><div class="key-fact-icon">💰</div><div class="key-fact-label">Währung</div><div class="key-fact-value">Thai Baht (฿)</div></div>
+                        <div class="key-fact"><div class="key-fact-icon">🗣️</div><div class="key-fact-label">Sprache</div><div class="key-fact-value">Thai</div></div>
+                        <div class="key-fact"><div class="key-fact-icon">☸️</div><div class="key-fact-label">Religion</div><div class="key-fact-value">~95% Buddhismus</div></div>
+                        <div class="key-fact"><div class="key-fact-icon">⛰️</div><div class="key-fact-label">Höchster Berg</div><div class="key-fact-value">Doi Inthanon (2.565m)</div></div>
+                        <div class="key-fact"><div class="key-fact-icon">🏖️</div><div class="key-fact-label">Küstenlinie</div><div class="key-fact-value">3.219 km</div></div>
+                    </div>
+                </div>
+                <div class="info-section">
+                    <div class="info-section-title">📜 Geschichte</div>
+                    <div class="history-timeline">
+                        <div class="timeline-item"><div class="timeline-year">1238</div><div class="timeline-event">Gründung des Königreichs Sukhothai</div></div>
+                        <div class="timeline-item"><div class="timeline-year">1351</div><div class="timeline-event">Aufstieg des Königreichs Ayutthaya</div></div>
+                        <div class="timeline-item"><div class="timeline-year">1767</div><div class="timeline-event">Zerstörung Ayutthayas durch Burma</div></div>
+                        <div class="timeline-item"><div class="timeline-year">1782</div><div class="timeline-event">Gründung der Chakri-Dynastie (bis heute)</div></div>
+                        <div class="timeline-item"><div class="timeline-year">1932</div><div class="timeline-event">Ende der absoluten Monarchie</div></div>
+                        <div class="timeline-item"><div class="timeline-year">1939</div><div class="timeline-event">Umbenennung von "Siam" zu "Thailand"</div></div>
+                        <div class="timeline-item"><div class="timeline-year">2016</div><div class="timeline-event">König Rama X besteigt den Thron</div></div>
+                    </div>
+                </div>
+                <div class="info-section">
+                    <div class="info-section-title">🌟 Highlights</div>
+                    <div class="highlights-list">
+                        <div class="highlight-item"><div class="highlight-icon">🏛️</div><div class="highlight-content"><h4>Großer Palast in Bangkok</h4><p>Prachtvoller Königspalast mit dem heiligen Smaragd-Buddha</p></div></div>
+                        <div class="highlight-item"><div class="highlight-icon">🏝️</div><div class="highlight-content"><h4>Traumstrände</h4><p>Phuket, Koh Samui, Krabi – weltberühmte Inselparadiese</p></div></div>
+                        <div class="highlight-item"><div class="highlight-icon">🐘</div><div class="highlight-content"><h4>Elefanten-Schutzgebiete</h4><p>Ethische Begegnungen mit Asiatischen Elefanten</p></div></div>
+                        <div class="highlight-item"><div class="highlight-icon">🌸</div><div class="highlight-content"><h4>Chiang Mai</h4><p>Kulturhauptstadt des Nordens mit über 300 Tempeln</p></div></div>
+                        <div class="highlight-item"><div class="highlight-icon">🍜</div><div class="highlight-content"><h4>Street Food</h4><p>Weltberühmte Straßenküche – günstig und köstlich</p></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vocabulary Modal -->
+    <div class="modal" id="vocabModal">
+        <div class="modal-backdrop" onclick="closeModal('vocabModal')"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('vocabModal')">✕</button>
+            <div class="modal-header vocab-header">
+                <div class="modal-flag">🗣️</div>
+                <h2>Thai Sprache</h2>
+                <p>Wichtige Wörter & Aussprache</p>
+            </div>
+            <div class="modal-body">
+                <div class="info-section">
+                    <div class="vocab-grid" id="vocabGrid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Food Modal -->
+    <div class="modal" id="foodModal">
+        <div class="modal-backdrop" onclick="closeModal('foodModal')"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('foodModal')">✕</button>
+            <div class="modal-header food-header">
+                <div class="modal-flag">🍜</div>
+                <h2>Thailands Küche</h2>
+                <p>Typische Gerichte & Getränke</p>
+            </div>
+            <div class="modal-body">
+                <div class="info-section">
+                    <div class="info-section-title" style="color: #ec4899;">🍚 Hauptgerichte</div>
+                    <div class="food-grid" id="foodGrid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Vocabulary Data
+        const vocabulary = [
+            { thai: "สวัสดี", pronunciation: "Sawatdee", german: "Hallo / Auf Wiedersehen", phonetic: "sa-wat-DEE" },
+            { thai: "ขอบคุณ", pronunciation: "Khop Khun", german: "Danke", phonetic: "KOHP-kuhn" },
+            { thai: "ครับ / ค่ะ", pronunciation: "Khrap / Kha", german: "Höflichkeitspartikel (m/w)", phonetic: "KRAHP / KAH" },
+            { thai: "ใช่", pronunciation: "Chai", german: "Ja", phonetic: "TSCHAI" },
+            { thai: "ไม่", pronunciation: "Mai", german: "Nein / Nicht", phonetic: "MAI" },
+            { thai: "ขอโทษ", pronunciation: "Kho Thot", german: "Entschuldigung", phonetic: "KOH-toht" },
+            { thai: "สบายดีไหม", pronunciation: "Sabai Dee Mai?", german: "Wie geht's?", phonetic: "sa-BAI dee MAI" },
+            { thai: "ผม/ฉัน ชื่อ...", pronunciation: "Phom/Chan Chue...", german: "Ich heiße... (m/w)", phonetic: "POHM/TSCHAN tschüü" },
+            { thai: "เท่าไหร่", pronunciation: "Thao Rai?", german: "Wie viel?", phonetic: "TAO-rai" },
+            { thai: "น้ำ", pronunciation: "Nam", german: "Wasser", phonetic: "NAHM" },
+            { thai: "ข้าว", pronunciation: "Khao", german: "Reis", phonetic: "KAO" },
+            { thai: "อร่อย", pronunciation: "Aroy", german: "Lecker", phonetic: "a-ROI" },
+            { thai: "เผ็ด", pronunciation: "Phet", german: "Scharf", phonetic: "PET" },
+            { thai: "ช้าง", pronunciation: "Chang", german: "Elefant", phonetic: "TSCHAHNG" },
+            { thai: "สวยมาก", pronunciation: "Suay Mak", german: "Sehr schön", phonetic: "SU-ai MAHK" },
+            { thai: "ไปไหน", pronunciation: "Pai Nai?", german: "Wohin gehst du?", phonetic: "pai NAI" }
+        ];
+
+        // Food Data
+        const foodData = {
+            dishes: [
+                { name: "Pad Thai", emoji: "🍜", type: "Nationalgericht", description: "Gebratene Reisnudeln mit Ei, Tofu, Garnelen, Tamarinde, Erdnüssen und Limette. Das berühmteste thailändische Gericht weltweit!", tags: ["spicy"] },
+                { name: "Tom Yum Goong", emoji: "🍲", type: "Suppe", description: "Sauer-scharfe Garnelensuppe mit Zitronengras, Galgant, Kaffir-Limettenblättern und Chili. Explosiv aromatisch!", tags: ["spicy", "seafood"] },
+                { name: "Som Tam", emoji: "🥗", type: "Salat", description: "Scharfer grüner Papaya-Salat mit Chili, Knoblauch, Limette, Fischsauce und Erdnüssen. Nordöstliche Spezialität!", tags: ["spicy", "vegetarian"] },
+                { name: "Massaman Curry", emoji: "🍛", type: "Curry", description: "Mildes, reichhaltiges Curry mit persischen Einflüssen: Kartoffeln, Erdnüsse, Zimt und Kardamom.", tags: [] },
+                { name: "Grünes Curry", emoji: "🥘", type: "Curry", description: "Scharfes Curry mit grüner Chilipaste, Kokosmilch, Thai-Auberginen und Thai-Basilikum.", tags: ["spicy"] },
+                { name: "Khao Pad", emoji: "🍚", type: "Street Food", description: "Gebratener Reis mit Ei, Gemüse und wahlweise Huhn, Schwein oder Garnelen. Alltagsklassiker!", tags: [] },
+                { name: "Pad Krapao", emoji: "🌿", type: "Street Food", description: "Gehacktes Fleisch mit heiligem Basilikum, Chili und Knoblauch – serviert mit Spiegelei auf Reis.", tags: ["spicy"] },
+                { name: "Satay", emoji: "🍢", type: "Snack", description: "Gegrillte Fleischspieße mit cremiger Erdnusssauce und Gurkenrelish. Ursprünglich aus Malaysia!", tags: [] },
+                { name: "Mango Sticky Rice", emoji: "🥭", type: "Dessert", description: "Süßer Klebreis mit frischer Mango und Kokosmilch – der beliebteste thailändische Nachtisch!", tags: ["sweet", "vegetarian"] },
+                { name: "Roti", emoji: "🥞", type: "Süßigkeit", description: "Knuspriges Fladenbrot mit Banane, Ei, Nutella oder Kondensmilch. Beliebter Nachtmarkt-Snack!", tags: ["sweet", "vegetarian"] }
+            ],
+            drinks: [
+                { name: "Thai Eistee", emoji: "🧋", type: "Erfrischung", description: "Starker schwarzer Tee mit Kondensmilch, Zucker und Eis – orange gefärbt und süß-cremig!", tags: ["drink", "sweet"] },
+                { name: "Nam Maphrao", emoji: "🥥", type: "Erfrischung", description: "Frisches junges Kokoswasser direkt aus der Nuss – perfekt gegen die Hitze!", tags: ["drink", "vegetarian"] },
+                { name: "Singha / Chang Bier", emoji: "🍺", type: "Alkohol", description: "Die beiden beliebtesten thailändischen Biermarken – leicht und erfrischend.", tags: ["drink"] },
+                { name: "Mekhong", emoji: "🥃", type: "Spirituose", description: "Thailändischer Rum aus Zuckerrohr und Reis – Basis für Thai-Cocktails!", tags: ["drink"] },
+                { name: "Cha Yen", emoji: "☕", type: "Kaffee/Tee", description: "Thai-Milchtee – stark, süß und mit Kondensmilch. Auch heiß erhältlich!", tags: ["drink", "sweet"] }
+            ]
+        };
+
+        // Fun Facts
+        const startFunFacts = [
+            { icon: "🐘", text: "Der <strong>Elefant ist Thailands Nationaltier</strong> und war sogar bis 1917 auf der Nationalflagge abgebildet. Heute leben noch etwa 3.000-4.000 wilde Elefanten im Land!" },
+            { icon: "👑", text: "Thailand ist das <strong>einzige südostasiatische Land</strong>, das nie von einer europäischen Macht kolonisiert wurde. Der Name bedeutet 'Land der Freien'!" },
+            { icon: "🏛️", text: "Bangkoks <strong>offizieller Name</strong> hat 169 Buchstaben und ist damit der längste Stadtname der Welt. Die Thais nennen die Stadt einfach 'Krung Thep' (Stadt der Engel)!" },
+            { icon: "☸️", text: "Mit <strong>über 40.000 buddhistischen Tempeln</strong> (Wat) hat Thailand mehr Tempel als jedes andere Land der Welt. Etwa 95% der Bevölkerung sind Buddhisten." },
+            { icon: "🍜", text: "Die <strong>thailändische Küche</strong> wurde 2011 von CNN zur besten der Welt gewählt. Bangkok hat mehr Street-Food-Stände als jede andere Stadt!" },
+            { icon: "🎭", text: "Der <strong>traditionelle Thai-Gruß 'Wai'</strong> (gefaltete Hände vor der Brust) zeigt Respekt – je höher die Hände, desto mehr Respekt wird gezeigt!" },
+            { icon: "🌺", text: "In Thailand ist es <strong>illegal, auf Geld zu treten</strong>, da es das Bild des Königs trägt. Respekt vor der Monarchie ist tief verwurzelt." },
+            { icon: "🏝️", text: "Thailand hat <strong>über 1.400 Inseln</strong>, von denen etwa 100 bewohnt sind. Die bekanntesten sind Phuket, Koh Samui und Koh Phi Phi!" },
+            { icon: "🥊", text: "<strong>Muay Thai</strong> (Thaiboxen) ist der Nationalsport Thailands und wird seit dem 16. Jahrhundert praktiziert. Kämpfer nutzen 8 'Waffen': Fäuste, Ellbogen, Knie, Schienbeine!" },
+            { icon: "🌸", text: "Das <strong>Loy Krathong Festival</strong> ist eines der schönsten Feste: Tausende Laternen steigen in den Himmel, und Blumenkörbe treiben auf dem Wasser!" },
+            { icon: "🦎", text: "Thailand beherbergt <strong>10% aller Vogelarten</strong> der Welt und hat über 300 Säugetierarten – von Tigern bis zu Dugongs (Seekühe)!" },
+            { icon: "⛰️", text: "Im Norden Thailands liegt das <strong>'Goldene Dreieck'</strong>, wo Thailand, Laos und Myanmar aufeinandertreffen – einst berüchtigt für Opiumanbau, heute Touristenattraktion!" }
+        ];
+
+        // Quiz Data mit 4 neuen schweren Fragen
+        const quizData = [
+            {
+                category: "Hauptstadt & Geografie",
+                question: "Was ist die Hauptstadt von Thailand?",
+                options: ["Chiang Mai", "Bangkok", "Phuket", "Pattaya"],
+                correct: 1,
+                fact: "Bangkok (auf Thai 'Krung Thep' – Stadt der Engel) ist nicht nur die Hauptstadt, sondern auch mit über 10 Millionen Einwohnern die mit Abstand größte Stadt Thailands. Der vollständige zeremonielle Name der Stadt hat 169 Buchstaben und ist damit der längste Ortsname der Welt! Bangkok wurde 1782 von König Rama I gegründet und ist heute das politische, wirtschaftliche und kulturelle Zentrum des Landes."
+            },
+            {
+                category: "Geschichte",
+                question: "Unter welchem Namen war Thailand früher bekannt?",
+                options: ["Burma", "Siam", "Indochina", "Ayutthaya"],
+                correct: 1,
+                fact: "Thailand hieß bis 1939 'Siam' und wurde dann in 'Thailand' umbenannt, was 'Land der Freien' bedeutet. Kurzzeitig (1945-1949) hieß es wieder Siam, bevor der Name Thailand endgültig beibehalten wurde. Das Land ist stolz darauf, das einzige südostasiatische Land zu sein, das nie von einer europäischen Macht kolonisiert wurde – daher der passende Name!"
+            },
+            {
+                category: "Monarchie",
+                question: "Wie wird die aktuelle Königsdynastie Thailands genannt?",
+                options: ["Sukhothai-Dynastie", "Ayutthaya-Dynastie", "Chakri-Dynastie", "Thonburi-Dynastie"],
+                correct: 2,
+                fact: "Die Chakri-Dynastie regiert Thailand seit 1782, als König Rama I Bangkok als neue Hauptstadt gründete. Der aktuelle König Maha Vajiralongkorn (Rama X) bestieg 2016 den Thron nach dem Tod seines Vaters Rama IX, der 70 Jahre regierte und im Volk hochverehrt war. Die thailändische Monarchie genießt enormen Respekt – Majestätsbeleidigung kann mit bis zu 15 Jahren Gefängnis bestraft werden!"
+            },
+            {
+                category: "Religion",
+                question: "Welcher Prozentsatz der thailändischen Bevölkerung praktiziert den Theravada-Buddhismus?",
+                options: ["Etwa 70%", "Etwa 80%", "Etwa 90%", "Etwa 95%"],
+                correct: 3,
+                fact: "Etwa 95% der Thais sind Theravada-Buddhisten, was Thailand zu einem der buddhistischsten Länder der Welt macht. Es gibt über 40.000 buddhistische Tempel (Wat) im Land! Jeder männliche Thai wird ermutigt, mindestens einmal im Leben als Mönch zu leben – viele tun dies für einige Wochen oder Monate. Der Buddhismus durchdringt alle Bereiche des thailändischen Lebens."
+            },
+            {
+                category: "Geografie",
+                question: "Wie heißt der höchste Berg Thailands?",
+                options: ["Doi Suthep", "Doi Inthanon", "Doi Pui", "Doi Chiang Dao"],
+                correct: 1,
+                fact: "Doi Inthanon ist mit 2.565 Metern der höchste Gipfel Thailands und liegt in der Provinz Chiang Mai. Der Berg wurde nach König Inthawichayanon (dem letzten König von Chiang Mai) benannt, dessen Asche dort begraben liegt. Der Gipfel ist der kühlste Ort Thailands – hier kann es im Winter sogar Frost geben! Der Nationalpark beherbergt auch spektakuläre Wasserfälle."
+            },
+            {
+                category: "Währung",
+                question: "Wie heißt die offizielle Währung Thailands?",
+                options: ["Rupie", "Dong", "Baht", "Ringgit"],
+                correct: 2,
+                fact: "Der Thai Baht (฿) ist seit dem 15. Jahrhundert die Währung Thailands und einer der ältesten Währungsnamen der Welt. Ursprünglich bezeichnete 'Baht' eine Gewichtseinheit für Silber. Eine Besonderheit: Auf allen thailändischen Banknoten ist das Bild des Königs zu sehen, weshalb es als äußerst respektlos gilt, auf Geld zu treten oder es zu zerknüllen!"
+            },
+            {
+                category: "Nationalflagge",
+                question: "Welche Farben hat die thailändische Nationalflagge?",
+                options: ["Rot, Weiß, Blau", "Rot, Gelb, Grün", "Blau, Weiß, Gold", "Rot, Weiß, Grün"],
+                correct: 0,
+                fact: "Die thailändische Flagge ('Trairanga' – Trikolore) besteht aus fünf horizontalen Streifen: Rot-Weiß-Blau-Weiß-Rot. Rot symbolisiert das Land und Volk, Weiß steht für die Reinheit des Buddhismus, und Blau repräsentiert die Monarchie. Diese Flagge wurde 1917 eingeführt – davor zeigte die Flagge einen weißen Elefanten auf rotem Grund!"
+            },
+            {
+                category: "Kultur & Traditionen",
+                question: "Wie heißt der traditionelle thailändische Gruß mit gefalteten Händen?",
+                options: ["Namaste", "Wai", "Sawatdee", "Ram"],
+                correct: 1,
+                fact: "Der 'Wai' ist der traditionelle thailändische Gruß, bei dem die Handflächen vor der Brust zusammengelegt werden und der Kopf leicht geneigt wird. Je höher die Hände gehalten werden, desto mehr Respekt wird gezeigt. Gegenüber Mönchen werden die Hände bis zur Stirn gehoben! Der Wai wird auch zum Danken, Entschuldigen und Verabschieden verwendet. 'Sawatdee' ist das gesprochene 'Hallo'."
+            },
+            {
+                category: "Kulinarik",
+                question: "Welches Gericht gilt als Thailands bekanntestes Nationalgericht?",
+                options: ["Tom Yum", "Som Tam", "Pad Thai", "Grünes Curry"],
+                correct: 2,
+                fact: "Pad Thai (gebratene Reisnudeln) ist das international bekannteste thailändische Gericht. Interessanterweise wurde es erst in den 1930er Jahren populär, als die Regierung es als Teil einer nationalistischen Kampagne zur Förderung der Thai-Identität propagierte! Das authentische Pad Thai enthält Tamarindenpaste, Fischsauce, getrocknete Garnelen, Ei, Tofu, Knoblauch und wird mit Erdnüssen und Limette serviert."
+            },
+            {
+                category: "Tourismus",
+                question: "Welches ist das meistbesuchte Reiseziel in Thailand?",
+                options: ["Chiang Mai", "Phuket", "Bangkok", "Koh Samui"],
+                correct: 2,
+                fact: "Bangkok ist mit über 22 Millionen internationalen Besuchern pro Jahr (vor der Pandemie) eine der meistbesuchten Städte der Welt! Die Stadt bietet eine einzigartige Mischung aus prächtigen Tempeln (wie dem Wat Pho mit dem 46 Meter langen liegenden Buddha), modernen Wolkenkratzern, legendärem Street Food und pulsierendem Nachtleben. Der Große Palast allein zieht täglich Tausende Besucher an."
+            },
+            {
+                category: "Sport",
+                question: "Welcher Kampfsport ist der Nationalsport Thailands?",
+                options: ["Taekwondo", "Muay Thai", "Judo", "Kickboxen"],
+                correct: 1,
+                fact: "Muay Thai (Thaiboxen) wird auch 'Die Kunst der acht Gliedmaßen' genannt, da Kämpfer Fäuste, Ellbogen, Knie und Schienbeine einsetzen dürfen. Der Sport entwickelte sich aus militärischen Kampftechniken des 16. Jahrhunderts. Vor jedem Kampf führen die Kämpfer den 'Wai Khru Ram Muay' auf – einen rituellen Tanz zu Ehren ihrer Lehrer. Muay Thai ist heute weltweit populär und olympische Anerkennung wird angestrebt!"
+            },
+            {
+                category: "Natur & Tierwelt",
+                question: "Welches Tier ist das Nationaltier Thailands?",
+                options: ["Tiger", "Elefant", "Wasserbüffel", "Gibbon"],
+                correct: 1,
+                fact: "Der Asiatische Elefant (Chang) ist Thailands Nationaltier und Symbol für Stärke, Weisheit und Glück. Elefanten waren historisch entscheidend für Kriegsführung, Transport und die Holzindustrie. Heute leben noch etwa 3.000-4.000 wilde Elefanten in Thailand, hauptsächlich in Nationalparks. Der weiße Elefant gilt als heilig und Eigentum des Königs – daher der Ausdruck 'weißer Elefant' für nutzlose Geschenke!"
+            },
+            {
+                category: "Feste & Feiertage",
+                question: "Wie heißt das berühmte thailändische Wasserfest zum Neujahr?",
+                options: ["Loy Krathong", "Songkran", "Yi Peng", "Phi Ta Khon"],
+                correct: 1,
+                fact: "Songkran (13.-15. April) ist das traditionelle thailändische Neujahrsfest und die größte Wasserschlacht der Welt! Ursprünglich ging es darum, Buddha-Statuen und ältere Menschen sanft mit Wasser zu übergießen als Zeichen der Reinigung und des Respekts. Heute ist es eine ausgelassene Straßenparty, bei der sich Millionen Menschen mit Wasserpistolen und Eimern gegenseitig nassspritzen!"
+            },
+            {
+                category: "Wirtschaft",
+                question: "Welches Produkt ist Thailands wichtigstes landwirtschaftliches Exportgut?",
+                options: ["Kaffee", "Reis", "Zucker", "Kautschuk"],
+                correct: 1,
+                fact: "Thailand ist einer der weltgrößten Reisexporteure und produziert den berühmten 'Jasminreis' (Khao Hom Mali), der für sein blumiges Aroma bekannt ist. Reis ist seit Jahrtausenden das Grundnahrungsmittel Thailands – das thailändische Wort für 'essen' (gin khao) bedeutet wörtlich 'Reis essen'! Die Reisterrassen im Norden sind nicht nur landwirtschaftlich wichtig, sondern auch atemberaubend schön."
+            },
+            {
+                category: "UNESCO-Welterbe",
+                question: "Welche historische Stadt war einst Hauptstadt eines mächtigen Thai-Königreichs und ist heute UNESCO-Welterbe?",
+                options: ["Sukhothai", "Chiang Mai", "Lopburi", "Nakhon Pathom"],
+                correct: 0,
+                fact: "Sukhothai (1238-1438) gilt als 'Wiege der thailändischen Zivilisation' und war das erste große thailändische Königreich. Hier wurde das thailändische Alphabet entwickelt! Der historische Park beherbergt die Ruinen von 193 Tempeln auf 70 km². Die berühmteste Statue ist der 'Gehende Buddha' – eine einzigartige Darstellung, die in Sukhothai erfunden wurde. Auch Ayutthaya (die spätere Hauptstadt) ist UNESCO-Welterbe."
+            },
+            {
+                category: "Inseln & Strände",
+                question: "Welche thailändische Insel ist die größte?",
+                options: ["Koh Samui", "Koh Phi Phi", "Phuket", "Koh Chang"],
+                correct: 2,
+                fact: "Phuket ist mit 543 km² Thailands größte Insel und ein weltberühmtes Touristenziel. Die Insel ist über eine Brücke mit dem Festland verbunden. Phuket hat eine reiche Geschichte als Handelsposten für Zinn und war einst ein Treffpunkt für Händler aus Indien, China und Portugal. Heute lockt die Insel mit Stränden wie Patong, Kata und Karon sowie lebhaftem Nachtleben."
+            },
+            {
+                category: "Sprache",
+                question: "Wie viele Töne hat die thailändische Sprache?",
+                options: ["3 Töne", "4 Töne", "5 Töne", "6 Töne"],
+                correct: 2,
+                fact: "Thai ist eine tonale Sprache mit 5 verschiedenen Tönen: mittel, tief, fallend, hoch und steigend. Das gleiche Wort kann je nach Ton völlig unterschiedliche Bedeutungen haben! Zum Beispiel bedeutet 'ma' mit verschiedenen Tönen: Pferd, Hund, oder kommen. Das thailändische Alphabet hat 44 Konsonanten und 32 Vokale – es wurde im 13. Jahrhundert von König Ramkhamhaeng von Sukhothai entwickelt."
+            },
+            {
+                category: "Tempel & Religion",
+                question: "In welchem Tempel befindet sich der berühmte liegende Buddha (46 Meter lang)?",
+                options: ["Wat Arun", "Wat Pho", "Wat Phra Kaew", "Wat Saket"],
+                correct: 1,
+                fact: "Wat Pho in Bangkok beherbergt eine der beeindruckendsten Buddha-Statuen der Welt: einen 46 Meter langen und 15 Meter hohen liegenden Buddha, dessen Fußsohlen mit 108 Perlmutt-Einlegearbeiten verziert sind. Der Tempel ist auch als Geburtsort der traditionellen Thai-Massage bekannt – hier wurde die erste Massageschule Thailands gegründet! Wat Pho ist älter als Bangkok selbst."
+            },
+            {
+                category: "Moderne Kultur",
+                question: "Welches thailändische Getränk ist weltweit als Energy-Drink bekannt geworden?",
+                options: ["Chang", "Singha", "Red Bull", "Mekhong"],
+                correct: 2,
+                fact: "Red Bull (auf Thai 'Krating Daeng' – roter Stier) wurde 1976 von Chaleo Yoovidhya in Thailand erfunden! Das Original ist süßer, stärker und nicht kohlensäurehaltig. Der österreichische Unternehmer Dietrich Mateschitz entdeckte das Getränk, passte die Formel an den westlichen Geschmack an und gründete Red Bull GmbH. Thailand bleibt einer der größten Märkte – hier kostet eine Dose nur etwa 10 Baht (0,25€)!"
+            },
+            {
+                category: "Nationalparks",
+                question: "Wie viele Nationalparks gibt es in Thailand?",
+                options: ["Etwa 50", "Etwa 100", "Etwa 130", "Etwa 175"],
+                correct: 2,
+                fact: "Thailand hat beeindruckende 133 Nationalparks, die etwa 18% der Landesfläche bedecken! Der erste war Khao Yai (1962), der auch zum UNESCO-Welterbe gehört und Heimat von Elefanten, Tigern und Gibbons ist. Besonders berühmt sind auch Erawan (mit seinen sieben türkisfarbenen Wasserfällen), Khao Sok (mit einem der ältesten Regenwälder der Welt) und die Similan-Inseln (weltklasse Tauchgebiet)."
+            },
+            {
+                category: "Geografie",
+                question: "An wie viele Länder grenzt Thailand?",
+                options: ["2 Länder", "3 Länder", "4 Länder", "5 Länder"],
+                correct: 2,
+                fact: "Thailand grenzt an vier Länder: Myanmar (Burma) im Westen und Norden, Laos im Norden und Osten, Kambodscha im Osten und Malaysia im Süden. Im berühmten 'Goldenen Dreieck' treffen Thailand, Laos und Myanmar aufeinander – diese Region war einst berüchtigt für Opiumanbau, ist heute aber ein beliebtes Touristenziel. Thailand hat auch zwei Küsten: am Golf von Thailand und an der Andamanensee."
+            },
+            {
+                category: "Kulinarik",
+                question: "Welche Zutat ist für die meisten thailändischen Gerichte unverzichtbar?",
+                options: ["Sojasoße", "Fischsauce (Nam Pla)", "Kokosmilch", "Sesamöl"],
+                correct: 1,
+                fact: "Fischsauce (Nam Pla) ist das 'flüssige Gold' der thailändischen Küche – sie wird aus fermentiertem Fisch hergestellt und verleiht Gerichten den typischen 'Umami'-Geschmack. Thailand ist einer der weltgrößten Produzenten! Die beste Fischsauce stammt angeblich aus der Insel Phu Quoc (heute Vietnam). Während Westler oft Salz zum Würzen nehmen, greifen Thais zur Fischsauce – selbst zu Früchten!"
+            },
+            // 4 NEUE SCHWERE FRAGEN
+            {
+                category: "Geschichte (Schwer)",
+                question: "Welcher thailändische König reformierte das Land im 19. Jahrhundert nach westlichem Vorbild und inspirierte den Film 'Der König und ich'?",
+                options: ["Rama III (Nangklao)", "Rama IV (Mongkut)", "Rama V (Chulalongkorn)", "Rama VI (Vajiravudh)"],
+                correct: 1,
+                fact: "König Mongkut (Rama IV, regierte 1851-1868) war ein hochgebildeter Monarch, der 27 Jahre als buddhistischer Mönch lebte, bevor er den Thron bestieg. Er sprach fließend Englisch und Latein, studierte westliche Wissenschaften und begann die Modernisierung Thailands. Seine Korrespondenz mit der britischen Gouvernante Anna Leonowens inspirierte das Musical 'Der König und ich' – allerdings ist der Film in Thailand verboten, da er als respektlos gegenüber der Monarchie gilt! Sein Sohn Rama V setzte die Reformen fort und schaffte die Sklaverei ab."
+            },
+            {
+                category: "Geografie (Schwer)",
+                question: "Wie heißt der längste Fluss Thailands, der auch durch Laos, Myanmar und China fließt?",
+                options: ["Chao Phraya", "Mekong", "Salween", "Ping"],
+                correct: 1,
+                fact: "Der Mekong ist mit etwa 4.350 km einer der längsten Flüsse Asiens und bildet auf etwa 850 km die Grenze zwischen Thailand und Laos. Er entspringt im tibetischen Hochland und fließt durch sechs Länder! Der Chao Phraya ist zwar kürzer (372 km), aber Thailands wichtigster Fluss – er fließt durch Bangkok und war historisch die Lebensader des Königreichs. Das jährliche Loy Krathong-Festival findet traditionell an Flüssen statt, wobei Menschen Blumenkörbe aufs Wasser setzen."
+            },
+            {
+                category: "Kunst & Architektur (Schwer)",
+                question: "Welcher berühmte 'Weiße Tempel' in Chiang Rai wurde von einem zeitgenössischen Künstler geschaffen und ist noch im Bau?",
+                options: ["Wat Rong Khun", "Wat Phra That Doi Suthep", "Wat Chedi Luang", "Wat Phra Singh"],
+                correct: 0,
+                fact: "Wat Rong Khun, der 'Weiße Tempel', wurde 1997 vom thailändischen Künstler Chalermchai Kositpipat begonnen und ist bis heute unvollendet – er plant, bis 2070 weiterzubauen! Der komplett weiße Tempel mit Spiegelglas-Einlagen symbolisiert die Reinheit Buddhas. Im Inneren finden sich überraschende moderne Elemente: Wandmalereien zeigen Superman, die Matrix und den 11. September! Der Künstler finanziert das Projekt selbst und lehnte staatliche Förderung ab, um seine künstlerische Freiheit zu bewahren."
+            },
+            {
+                category: "Politik & Gesellschaft (Schwer)",
+                question: "Wie viele Militärputsche gab es in Thailand seit 1932 (Ende der absoluten Monarchie)?",
+                options: ["5 Putsche", "9 Putsche", "13 Putsche", "19 Putsche"],
+                correct: 2,
+                fact: "Thailand erlebte seit 1932 bemerkenswerte 13 erfolgreiche Militärputsche – mehr als fast jedes andere Land der Welt! Dazu kamen etwa 9 gescheiterte Putschversuche. Der letzte erfolgreiche Putsch war 2014 unter General Prayuth Chan-ocha. Diese politische Instabilität steht im Kontrast zur stabilen Monarchie, die als einigendes Symbol dient. Trotz der vielen Umstürze hat Thailand wirtschaftlich prosperiert und sich zum beliebten Touristenziel entwickelt. Die politische Landschaft bleibt jedoch komplex mit Spannungen zwischen verschiedenen Fraktionen."
+            }
+        ];
+
+        // Game State
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+        let timer = 35;
+        let timerInterval = null;
+        const TIMER_MAX = 35;
+        const circumference = 2 * Math.PI * 40;
+
+        // Initialize
+        function init() {
+            createFloatingElements();
+            createParticles();
+            loadFunFacts();
+            loadVocabulary();
+            loadFood();
+        }
+
+        function createFloatingElements() {
+            const container = document.getElementById('floatingElements');
+            const emojis = ['🐘', '🌴', '🍜', '🏛️', '🌺', '🏝️', '☸️', '🥊', '🦋', '🌸'];
+            for (let i = 0; i < 12; i++) {
+                const el = document.createElement('div');
+                el.className = 'floating-element';
+                el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                el.style.left = Math.random() * 100 + '%';
+                el.style.top = Math.random() * 100 + '%';
+                el.style.animationDelay = Math.random() * 10 + 's';
+                el.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(el);
+            }
+        }
+
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDelay = Math.random() * 15 + 's';
+                p.style.animationDuration = (10 + Math.random() * 10) + 's';
+                container.appendChild(p);
+            }
+        }
+
+        function loadFunFacts() {
+            const shuffled = [...startFunFacts].sort(() => Math.random() - 0.5);
+            document.querySelector('#funFact1 .fun-fact-icon').textContent = shuffled[0].icon;
+            document.querySelector('#funFact1 .fun-fact-text').innerHTML = shuffled[0].text;
+            document.querySelector('#funFact2 .fun-fact-icon').textContent = shuffled[1].icon;
+            document.querySelector('#funFact2 .fun-fact-text').innerHTML = shuffled[1].text;
+        }
+
+        function loadVocabulary() {
+            const grid = document.getElementById('vocabGrid');
+            grid.innerHTML = vocabulary.map(w => `
+                <div class="vocab-card">
+                    <div class="vocab-thai">${w.thai}</div>
+                    <div class="vocab-pronunciation">${w.pronunciation} <span class="pronunciation-phonetic">${w.phonetic}</span></div>
+                    <div class="vocab-german">${w.german}</div>
+                </div>
+            `).join('');
+        }
+
+        function loadFood() {
+            const grid = document.getElementById('foodGrid');
+            const getTagLabel = tag => ({ spicy: '🌶️ Scharf', vegetarian: '🌱 Vegetarisch', sweet: '🍯 Süß', drink: '🥤 Getränk', seafood: '🦐 Meeresfrüchte' }[tag] || tag);
+            
+            let html = foodData.dishes.map(item => `
+                <div class="food-card">
+                    <div class="food-header-card">
+                        <span class="food-emoji">${item.emoji}</span>
+                        <div><div class="food-name">${item.name}</div><div class="food-type">${item.type}</div></div>
+                    </div>
+                    <div class="food-description">${item.description}</div>
+                    <div class="food-tags">${item.tags.map(t => `<span class="food-tag ${t}">${getTagLabel(t)}</span>`).join('')}</div>
+                </div>
+            `).join('');
+            
+            html += `<div class="food-section-divider"><span class="food-section-title">🍹 Getränke</span></div>`;
+            
+            html += foodData.drinks.map(item => `
+                <div class="food-card">
+                    <div class="food-header-card">
+                        <span class="food-emoji">${item.emoji}</span>
+                        <div><div class="food-name">${item.name}</div><div class="food-type">${item.type}</div></div>
+                    </div>
+                    <div class="food-description">${item.description}</div>
+                    <div class="food-tags">${item.tags.map(t => `<span class="food-tag ${t}">${getTagLabel(t)}</span>`).join('')}</div>
+                </div>
+            `).join('');
+            
+            grid.innerHTML = html;
+        }
+
+        function shuffleArray(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        // Timer
+        function startTimer() {
+            timer = TIMER_MAX;
+            const progress = document.getElementById('timerProgress');
+            progress.style.strokeDasharray = circumference;
+            progress.style.strokeDashoffset = 0;
+            progress.classList.remove('warning', 'danger');
+            document.getElementById('timerNumber').classList.remove('warning', 'danger');
+            document.getElementById('timerContainer').classList.remove('danger');
+            updateTimerDisplay();
+
+            timerInterval = setInterval(() => {
+                timer--;
+                updateTimerDisplay();
+                
+                const offset = circumference - (timer / TIMER_MAX) * circumference;
+                progress.style.strokeDashoffset = offset;
+
+                if (timer <= 10) {
+                    progress.classList.add('danger');
+                    progress.classList.remove('warning');
+                    document.getElementById('timerNumber').classList.add('danger');
+                    document.getElementById('timerNumber').classList.remove('warning');
+                    document.getElementById('timerContainer').classList.add('danger');
+                } else if (timer <= 15) {
+                    progress.classList.add('warning');
+                    document.getElementById('timerNumber').classList.add('warning');
+                }
+
+                if (timer <= 0) {
+                    clearInterval(timerInterval);
+                    handleTimeout();
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        function updateTimerDisplay() {
+            document.getElementById('timerNumber').textContent = timer;
+        }
+
+        function handleTimeout() {
+            if (answered) return;
+            answered = true;
+            const q = quizData[currentQuestion];
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.add('disabled');
+                if (opt.dataset.correct === 'true') opt.classList.add('correct');
+            });
+            showFeedback(false, q);
+        }
+
+        // Quiz Logic
+        function startQuiz() {
+            document.getElementById('startScreen').classList.add('hide');
+            document.getElementById('quizContent').classList.add('show');
+            currentQuestion = 0;
+            score = 0;
+            document.getElementById('totalNum').textContent = quizData.length;
+            document.getElementById('finalTotal').textContent = quizData.length;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            const q = quizData[currentQuestion];
+            
+            document.getElementById('currentNum').textContent = currentQuestion + 1;
+            document.getElementById('currentScore').textContent = score;
+            document.getElementById('progress').style.width = `${(currentQuestion / quizData.length) * 100}%`;
+            document.getElementById('categoryText').textContent = q.category;
+            document.getElementById('question').textContent = q.question;
+
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+            const options = q.options.map((opt, idx) => ({ text: opt, isCorrect: idx === q.correct }));
+            const shuffled = shuffleArray(options);
+
+            shuffled.forEach((opt, i) => {
+                const el = document.createElement('div');
+                el.className = 'option';
+                el.innerHTML = `<span class="option-letter">${letters[i]}</span><span class="option-text">${opt.text}</span>`;
+                el.dataset.correct = opt.isCorrect;
+                el.onclick = () => selectOption(el, opt.isCorrect, q);
+                optionsContainer.appendChild(el);
+            });
+
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('nextBtn').className = 'next-btn';
+            document.getElementById('correctAnswer').style.display = 'none';
+            startTimer();
+        }
+
+        function selectOption(el, isCorrect, q) {
+            if (answered) return;
+            answered = true;
+            stopTimer();
+
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.add('disabled');
+                if (opt.dataset.correct === 'true') opt.classList.add('correct');
+            });
+
+            if (isCorrect) {
+                score++;
+                document.getElementById('currentScore').textContent = score;
+            } else {
+                el.classList.add('wrong');
+            }
+            
+            showFeedback(isCorrect, q);
+        }
+
+        function showFeedback(isCorrect, q) {
+            const feedback = document.getElementById('feedback');
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'wrong'} show`;
+            document.getElementById('feedbackIcon').textContent = isCorrect ? '✓' : (timer <= 0 ? '⏰' : '✗');
+            document.getElementById('feedbackTitle').textContent = isCorrect ? 'Richtig!' : (timer <= 0 ? 'Zeit abgelaufen!' : 'Leider falsch!');
+            
+            if (!isCorrect) {
+                const ca = document.getElementById('correctAnswer');
+                ca.innerHTML = `Richtige Antwort: <strong>${q.options[q.correct]}</strong>`;
+                ca.style.display = 'block';
+            }
+
+            document.getElementById('factText').textContent = q.fact;
+            document.getElementById('nextBtn').textContent = currentQuestion === quizData.length - 1 ? '🏆 Ergebnis' : 'Weiter →';
+            document.getElementById('nextBtn').className = 'next-btn show';
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion >= quizData.length) {
+                showResults();
+            } else {
+                document.getElementById('quizContent').classList.remove('show');
+                setTimeout(() => {
+                    loadQuestion();
+                    document.getElementById('quizContent').classList.add('show');
+                }, 300);
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quizContent').classList.remove('show');
+            setTimeout(() => {
+                document.getElementById('results').classList.add('show');
+                const total = quizData.length;
+                const percent = Math.round((score / total) * 100);
+                
+                document.getElementById('finalScoreNum').textContent = score;
+                document.getElementById('correctCount').textContent = score;
+                document.getElementById('wrongCount').textContent = total - score;
+                document.getElementById('scorePercent').textContent = percent + '%';
+                document.getElementById('scoreCircle').style.setProperty('--score-percent', percent);
+
+                const messages = [
+                    [100, '🏆 Perfekt! Du bist ein wahrer Thailand-Experte!'],
+                    [90, '🌟 Hervorragend! Du kennst Thailand ausgezeichnet!'],
+                    [75, '👏 Sehr gut! Du weißt wirklich viel über Thailand!'],
+                    [60, '👍 Gut gemacht! Solides Wissen!'],
+                    [45, '📚 Nicht schlecht! Es gibt noch einiges zu entdecken!'],
+                    [0, '🌴 Ein guter Anfang! Entdecke mehr über Thailand!']
+                ];
+                document.getElementById('resultMessage').textContent = messages.find(m => percent >= m[0])[1];
+            }, 300);
+        }
+
+        function restartQuiz() {
+            stopTimer();
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('startScreen').classList.remove('hide');
+            loadFunFacts();
+        }
+
+        // Modal Functions
+        function openModal(id) {
+            document.getElementById(id).classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                ['infoModal', 'vocabModal', 'foodModal'].forEach(id => closeModal(id));
+            }
+        });
+
+        // Start
+        init();
+    </script>
+</body>
+</html>
